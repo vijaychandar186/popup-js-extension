@@ -19,6 +19,9 @@
 - **Ambient Effects**: Subtle background overlay reflects current wellness state.
 - **Zoom Adjustment**: Dynamically scales the monitoring window content based on user distance.
 - **Customizable Settings**: Toggle individual features and fine-tune thresholds, timers, and detection sensitivity — all saved and applied live.
+- **Night Mode**: Inverts colors with hue correction across all open browser tabs for reduced eye strain in low-light environments.
+- **Warm Filter (Temperature)**: Applies a sepia/brightness/saturation CSS filter to all tabs to reduce blue light — intensity adjustable via slider.
+- **Analytics Dashboard**: Tracks daily session history (session time, blink count, average distance, wellness score, alert counts) with a 7-day history table and CSV export.
 
 ---
 
@@ -43,6 +46,8 @@
 5. The popup **Dashboard** tab shows live stats (wellness score, distance, session time, blink count, posture) updated in real time.
 6. Adjust features and thresholds in the **Settings** tab, then click **Save Settings**.
 7. Assign alert sounds per event type in the **Sounds** tab.
+8. Enable **Night Mode** or **Warm Filter** in the Settings tab — changes apply instantly to all open tabs.
+9. View session history and trends in the **Analytics** tab; export to a full report via **Export Report**.
 8. Click **Stop Monitoring** in the popup to close the monitoring window and clear all alarms.
 
 ---
@@ -65,6 +70,10 @@ Accessible from the **Settings** tab in the popup:
 **Features** — toggle on/off individually:
 - Notifications, Zoom, Ambient, Breathing, Wellness Score, Distance, Blink, Session, Posture
 
+**Display**:
+- Night Mode: inverts all browser tab colors (CSS `invert + hue-rotate`) — pushed globally via background service worker
+- Warm Filter: reduces blue light with adjustable intensity (1–100%)
+
 **Distance** (cm):
 - Minimum: 20–50 &nbsp;|&nbsp; Optimal: 40–70 &nbsp;|&nbsp; Maximum: 60–100
 
@@ -77,6 +86,16 @@ Accessible from the **Settings** tab in the popup:
 - Blink Sensitivity: 0.005–0.05
 - Blink Timeout: 5–60 seconds
 - Session Limit: 10–120 minutes
+
+---
+
+## Analytics
+
+The **Analytics** tab in the popup shows:
+
+- Today's session time, blink count, average distance, and wellness score
+- A 7-day history table with per-day alert counts
+- **Export Report** button opens a full-page report (`templates/analytics.html`) with complete history
 
 ---
 
