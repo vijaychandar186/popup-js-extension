@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wellness Monitor</title>
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <link href="static/css/output.css" rel="stylesheet">
+</head>
+
+<body class="app-page">
+
+  <div id="error-message" class="hidden">
+    <div class="error-header">
+      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+      </svg>
+      <span>Camera Error</span>
+    </div>
+    <p></p>
+  </div>
+
+  <div class="camera-wrap">
+    <video id="video"></video>
+    <canvas id="canvas"></canvas>
+    <div id="loading-spinner">
+      <div class="spinner-ring-wrap">
+        <div class="spinner-ring"></div>
+        <svg class="spinner-ring-icon" width="24" height="24" fill="none" stroke="black" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+        </svg>
+      </div>
+      <p class="spinner-label">Starting camera...</p>
+    </div>
+  </div>
+
+  <div id="notification-container">
+    <div id="notification-bar" class="hidden">
+      <div class="notif-inner">
+        <div id="notification-icon" class="notif-icon">
+          <svg width="20" height="20" fill="none" stroke="black" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div class="notif-body">
+          <p id="notification-title">Wellness Tip</p>
+          <p id="notification-text">Monitoring...</p>
+        </div>
+        <button id="dismiss-notification">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="distance-status">
+    <div class="dist-inner">
+      <div id="distance-indicator">
+        <svg width="24" height="24" fill="none" stroke="black" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+        </svg>
+      </div>
+      <div>
+        <div class="dist-value"><span id="distance-value">--</span>cm</div>
+        <div class="dist-target">Target: <span id="target-distance">55</span>cm</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="breathing-guide">
+    <div class="breath-inner">
+      <div id="breathing-circle">
+        <svg width="24" height="24" fill="none" stroke="black" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="breath-label">Breathe</div>
+        <div class="breath-sub">Deep breath exercise</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="stats-bar">
+    <div class="stats-inner">
+      <div class="stats-group">
+        <div id="blink-counter-container" class="stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" fill="none" stroke="black" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="stat-label">Blinks</div>
+            <div class="stat-value" id="blink-counter">0</div>
+          </div>
+        </div>
+        <div id="session-time-container" class="stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" fill="none" stroke="black" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="stat-label">Session</div>
+            <div class="stat-value" id="session-time">0m</div>
+          </div>
+        </div>
+        <div id="posture-status-container" class="stat-item">
+          <div class="stat-icon">
+            <svg width="20" height="20" fill="none" stroke="black" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="stat-label">Posture</div>
+            <div class="stat-value" id="posture-status">Good</div>
+          </div>
+        </div>
+      </div>
+      <div id="wellness-score" class="score-good">
+        <span class="score-label">Wellness Score</span>
+        <span class="score-val" id="score-value">85</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="ambient-overlay"></div>
+
+  <script src="static/js/suppress-logs.js"></script>
+  <script src="libs/camera_utils.js"></script>
+  <script src="libs/face_mesh.js"></script>
+  <script type="module" src="static/js/app.js"></script>
+</body>
+
+</html>

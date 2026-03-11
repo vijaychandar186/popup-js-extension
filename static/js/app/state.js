@@ -1,0 +1,52 @@
+export const featureToggles = {
+    notifications: true,
+    zoom: true,
+    ambient: true,
+    breathing: true,
+    wellness: true,
+    distance: true,
+    blink: true,
+    session: true,
+    posture: true,
+};
+
+export const soundSettings = {
+    enabled: true,
+    volume: 60,
+    sounds: {
+        distance: 'assets/sounds/distance.mp3',
+        blink: 'assets/sounds/blink.mp3',
+        break: 'assets/sounds/break.mp3',
+        session: 'assets/sounds/session.mp3',
+        notify: 'assets/sounds/notify.mp3',
+    },
+};
+
+export const state = {
+    rawDistance: 60,
+    smoothedDistance: 60,
+    distanceBuffer: [],
+    bufferSize: 10,
+    lastNotifications: new Map(),
+    lastBlinkTime: Date.now(),
+    blinkCount: 0,
+    eyeOpenState: true,
+    startTime: Date.now(),
+    lastBreakReminder: Date.now(),
+    lastBreathingReminder: Date.now(),
+    frameCount: 0,
+    wellnessScore: 85,
+    postureScore: 100,
+    blinkScore: 100,
+    distanceScore: 100,
+    currentZoom: 1,
+    targetZoom: 1,
+    zoomDeadzone: 3,
+    lastScoreUpdateTime: Date.now(),
+    distanceTotal: 0,
+    distanceSampleCount: 0,
+    wellnessTotal: 0,
+    wellnessSampleCount: 0,
+    distanceAlertCount: 0,
+    blinkAlertCount: 0,
+};

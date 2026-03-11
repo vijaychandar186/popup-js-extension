@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wellness Monitor</title>
+  <link href="static/css/output.css" rel="stylesheet">
+</head>
+
+<body class="popup-page">
+
+  <div class="popup-header">
+    <div class="header-brand">
+      <img src="assets/favicon-32x32.png" alt="icon">
+      <span class="header-title">WELLNESS MONITOR</span>
+    </div>
+    <div class="header-status">
+      <div id="status-dot"></div>
+      <span id="status-text">Checking...</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+    <button class="tab-btn" data-tab="sounds">Sounds</button>
+    <button class="tab-btn" data-tab="settings">Settings</button>
+    <button class="tab-btn" data-tab="analytics">Analytics</button>
+  </div>
+
+  <div class="tab-content active scrollable" id="tab-dashboard">
+    <div class="tab-inner">
+
+      <button id="open-window-btn">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        <span id="window-btn-text">Start Monitoring</span>
+      </button>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-label">Wellness Score</div>
+          <div id="stat-wellness" class="stat-card-value">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Distance</div>
+          <div class="stat-card-value">
+            <span id="stat-distance">--</span><span class="unit">cm</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Session</div>
+          <div id="stat-session" class="stat-card-value">--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Blinks</div>
+          <div id="stat-blinks" class="stat-card-value">--</div>
+        </div>
+      </div>
+
+      <div class="posture-row">
+        <span class="posture-label">Posture</span>
+        <span id="stat-posture" class="posture-value">--</span>
+      </div>
+
+      <p id="last-updated">Open the monitoring window to start tracking</p>
+    </div>
+  </div>
+
+  <div class="tab-content scrollable" id="tab-sounds">
+    <div class="tab-inner">
+
+      <div class="sound-master">
+        <div class="setting-row">
+          <span class="setting-label">Enable Sound Alerts</span>
+          <label class="toggle">
+            <input type="checkbox" id="sound-enabled" checked>
+            <div class="toggle-track"></div>
+          </label>
+        </div>
+        <div class="volume-row">
+          <span class="volume-label">Volume</span>
+          <input type="range" id="sound-volume" min="0" max="100" value="60">
+          <span id="volume-display" class="volume-display">60%</span>
+        </div>
+      </div>
+
+      <p class="sounds-header">Alert Sound Assignment</p>
+      <div class="sounds-list">
+
+        <div class="sound-row">
+          <div class="sound-name">
+            <div class="sound-name-label">Distance</div>
+            <div class="sound-name-sub">Too close / far</div>
+          </div>
+          <select id="sound-distance">
+            <option value="">None</option>
+            <option value="assets/sounds/distance.mp3" selected>distance.mp3</option>
+            <option value="assets/sounds/blink.mp3">blink.mp3</option>
+            <option value="assets/sounds/break.mp3">break.mp3</option>
+            <option value="assets/sounds/notify.mp3">notify.mp3</option>
+            <option value="assets/sounds/session.mp3">session.mp3</option>
+          </select>
+          <button class="preview-btn" data-sound-input="sound-distance" title="Preview">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+
+        <div class="sound-row">
+          <div class="sound-name">
+            <div class="sound-name-label">Blink Reminder</div>
+            <div class="sound-name-sub">Low blink rate</div>
+          </div>
+          <select id="sound-blink">
+            <option value="">None</option>
+            <option value="assets/sounds/blink.mp3" selected>blink.mp3</option>
+            <option value="assets/sounds/distance.mp3">distance.mp3</option>
+            <option value="assets/sounds/break.mp3">break.mp3</option>
+            <option value="assets/sounds/notify.mp3">notify.mp3</option>
+            <option value="assets/sounds/session.mp3">session.mp3</option>
+          </select>
+          <button class="preview-btn" data-sound-input="sound-blink" title="Preview">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+
+        <div class="sound-row">
+          <div class="sound-name">
+            <div class="sound-name-label">Break Reminder</div>
+            <div class="sound-name-sub">20-20-20 rule</div>
+          </div>
+          <select id="sound-break">
+            <option value="">None</option>
+            <option value="assets/sounds/break.mp3" selected>break.mp3</option>
+            <option value="assets/sounds/blink.mp3">blink.mp3</option>
+            <option value="assets/sounds/distance.mp3">distance.mp3</option>
+            <option value="assets/sounds/notify.mp3">notify.mp3</option>
+            <option value="assets/sounds/session.mp3">session.mp3</option>
+          </select>
+          <button class="preview-btn" data-sound-input="sound-break" title="Preview">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+
+        <div class="sound-row">
+          <div class="sound-name">
+            <div class="sound-name-label">Session Alert</div>
+            <div class="sound-name-sub">Time limit reached</div>
+          </div>
+          <select id="sound-session">
+            <option value="">None</option>
+            <option value="assets/sounds/session.mp3" selected>session.mp3</option>
+            <option value="assets/sounds/blink.mp3">blink.mp3</option>
+            <option value="assets/sounds/break.mp3">break.mp3</option>
+            <option value="assets/sounds/distance.mp3">distance.mp3</option>
+            <option value="assets/sounds/notify.mp3">notify.mp3</option>
+          </select>
+          <button class="preview-btn" data-sound-input="sound-session" title="Preview">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+
+        <div class="sound-row">
+          <div class="sound-name">
+            <div class="sound-name-label">Breathing Cue</div>
+            <div class="sound-name-sub">Deep breath prompt</div>
+          </div>
+          <select id="sound-notify">
+            <option value="">None</option>
+            <option value="assets/sounds/notify.mp3" selected>notify.mp3</option>
+            <option value="assets/sounds/blink.mp3">blink.mp3</option>
+            <option value="assets/sounds/break.mp3">break.mp3</option>
+            <option value="assets/sounds/distance.mp3">distance.mp3</option>
+            <option value="assets/sounds/session.mp3">session.mp3</option>
+          </select>
+          <button class="preview-btn" data-sound-input="sound-notify" title="Preview">
+            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content scrollable" id="tab-settings">
+    <div class="tab-inner">
+
+      <div class="section">
+        <div class="section-title">Display</div>
+        <div class="setting-row">
+          <span class="setting-label">Night Mode</span>
+          <label class="toggle"><input type="checkbox" id="toggle-dark-mode"><div class="toggle-track"></div></label>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">Warm Filter</span>
+          <label class="toggle"><input type="checkbox" id="toggle-warm-filter"><div class="toggle-track"></div></label>
+        </div>
+        <div class="warm-intensity-row" id="warm-intensity-row" style="display:none">
+          <span class="warm-intensity-label">Intensity</span>
+          <input type="range" id="warm-intensity" min="5" max="100" value="30">
+          <span id="warm-intensity-display" class="warm-intensity-display">30%</span>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Features</div>
+        <div class="setting-row">
+          <span class="setting-label">Notifications</span>
+          <label class="toggle"><input type="checkbox" id="toggle-notifications" checked><div class="toggle-track"></div></label>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">Zoom</span>
+          <label class="toggle"><input type="checkbox" id="toggle-zoom" checked><div class="toggle-track"></div></label>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">Ambient</span>
+          <label class="toggle"><input type="checkbox" id="toggle-ambient" checked><div class="toggle-track"></div></label>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">Breathing</span>
+          <label class="toggle"><input type="checkbox" id="toggle-breathing" checked><div class="toggle-track"></div></label>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">Wellness Score</span>
+          <label class="toggle"><input type="checkbox" id="toggle-wellness" checked><div class="toggle-track"></div></label>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Monitoring</div>
+        <div class="setting-row">
+          <span class="setting-label">Distance</span>
+          <label class="toggle"><input type="checkbox" id="toggle-distance" checked><div class="toggle-track"></div></label>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">Blink</span>
+          <label class="toggle"><input type="checkbox" id="toggle-blink" checked><div class="toggle-track"></div></label>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">Session</span>
+          <label class="toggle"><input type="checkbox" id="toggle-session" checked><div class="toggle-track"></div></label>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">Posture</span>
+          <label class="toggle"><input type="checkbox" id="toggle-posture" checked><div class="toggle-track"></div></label>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Distance</div>
+        <div class="input-group">
+          <label class="input-label">Min (cm)</label>
+          <input type="number" id="config-min-distance" value="35" min="20" max="50">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Optimal (cm)</label>
+          <input type="number" id="config-optimal-distance" value="55" min="40" max="70">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Max (cm)</label>
+          <input type="number" id="config-max-distance" value="80" min="60" max="100">
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Timing</div>
+        <div class="input-group">
+          <label class="input-label">Notification Cooldown (s)</label>
+          <input type="number" id="config-notification-cooldown" value="30" min="10" max="300">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Break Reminder (min)</label>
+          <input type="number" id="config-break-reminder" value="20" min="5" max="60">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Breathing Reminder (min)</label>
+          <input type="number" id="config-breathing-reminder" value="5" min="1" max="30">
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Detection</div>
+        <div class="input-group">
+          <label class="input-label">Blink Sensitivity</label>
+          <input type="number" id="config-blink-threshold" value="0.015" step="0.001" min="0.005" max="0.05">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Blink Timeout (s)</label>
+          <input type="number" id="config-blink-timeout" value="20" min="5" max="60">
+        </div>
+        <div class="input-group">
+          <label class="input-label">Session Limit (min)</label>
+          <input type="number" id="config-screen-time-limit" value="30" min="10" max="120">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tab-content scrollable" id="tab-analytics">
+    <div class="tab-inner">
+
+      <div class="section-title" style="margin-bottom:0">Today's Overview</div>
+      <div class="analytics-grid">
+        <div class="analytics-card">
+          <div class="analytics-card-label">Session Time</div>
+          <div class="analytics-card-value" id="analytics-session">--</div>
+        </div>
+        <div class="analytics-card">
+          <div class="analytics-card-label">Blinks</div>
+          <div class="analytics-card-value" id="analytics-blinks">--</div>
+        </div>
+        <div class="analytics-card">
+          <div class="analytics-card-label">Avg Distance</div>
+          <div class="analytics-card-value" id="analytics-distance">--</div>
+        </div>
+        <div class="analytics-card">
+          <div class="analytics-card-label">Wellness Score</div>
+          <div class="analytics-card-value" id="analytics-wellness">--</div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin:0">Last 7 Days</div>
+      <div class="analytics-table-wrap">
+        <table class="analytics-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Session</th>
+              <th>Dist</th>
+              <th>Blinks</th>
+              <th>Score</th>
+              <th>Alerts</th>
+            </tr>
+          </thead>
+          <tbody id="analytics-tbody">
+            <tr><td colspan="6" style="text-align:center;padding:0.75rem;color:#6b7280;font-size:0.75rem">Start monitoring to collect data</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="analytics-export-btn" id="analytics-export-btn">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+        </svg>
+        Export Full Report (PDF)
+      </button>
+
+    </div>
+  </div>
+
+  <div class="popup-footer">
+    <button id="save-settings">Save Settings</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

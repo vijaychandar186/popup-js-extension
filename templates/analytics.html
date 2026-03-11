@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Eye Health Analytics Report</title>
+  <link rel="icon" href="../assets/favicon.ico" type="image/x-icon">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: white; color: black; margin: 0; padding: 2rem; }
+    .report-wrap { max-width: 860px; margin: 0 auto; }
+    .report-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; border-bottom: 3px solid black; padding-bottom: 1rem; }
+    .report-header img { width: 2rem; height: 2rem; }
+    .report-header h1 { margin: 0; font-size: 1.25rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.1em; }
+    .report-header p { margin: 0.25rem 0 0; font-size: 0.8rem; color: #6b7280; }
+    .header-actions { margin-left: auto; display: flex; gap: 0.75rem; }
+    .print-btn { background: black; color: white; border: none; padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; }
+    .print-btn:hover { background: #1f2937; }
+    .clear-btn { background: white; color: black; border: 2px solid black; padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; }
+    .clear-btn:hover { background: #f3f4f6; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .summary-card { border: 2px solid black; padding: 1rem; text-align: center; }
+    .summary-card-label { font-size: 0.65rem; color: #6b7280; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+    .summary-card-value { font-size: 1.75rem; font-weight: bold; }
+    .summary-card-sub { font-size: 0.7rem; color: #9ca3af; margin-top: 0.125rem; }
+    h2 { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.08em; margin: 1.5rem 0 0.75rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.5rem; }
+    .data-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .data-table th { background: black; color: white; padding: 0.5rem 0.75rem; text-align: left; font-weight: bold; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
+    .data-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #e5e7eb; }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: #f9fafb; }
+    .badge { display: inline-block; padding: 0.125rem 0.5rem; font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
+    .badge-good { background: black; color: white; }
+    .badge-mid { background: #e5e7eb; color: black; }
+    .badge-low { background: #d1d5db; color: black; }
+    .bar-wrap { display: flex; align-items: center; gap: 0.5rem; }
+    .bar { height: 8px; background: black; display: inline-block; min-width: 2px; max-width: 120px; }
+    .bar-val { font-size: 0.75rem; white-space: nowrap; }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: #9ca3af; font-size: 0.875rem; }
+    @media print {
+      .no-print { display: none !important; }
+      body { padding: 1rem; }
+      .data-table tr:hover td { background: white; }
+    }
+    body.dark-mode { background: #1e1e2e; color: #cdd6f4; }
+    body.dark-mode .report-header { border-bottom-color: #45475a; }
+    body.dark-mode .report-header p { color: #a6adc8; }
+    body.dark-mode .summary-card { border-color: #45475a; }
+    body.dark-mode .summary-card-label { color: #a6adc8; }
+    body.dark-mode .summary-card-sub { color: #6c7086; }
+    body.dark-mode h2 { border-bottom-color: #45475a; }
+    body.dark-mode .data-table th { background: #45475a; color: #cdd6f4; }
+    body.dark-mode .data-table td { border-bottom-color: #45475a; }
+    body.dark-mode .data-table tr:hover td { background: #2a2a3e; }
+    body.dark-mode .print-btn { background: #45475a; }
+    body.dark-mode .print-btn:hover { background: #585b70; }
+    body.dark-mode .clear-btn { background: #1e1e2e; border-color: #45475a; color: #cdd6f4; }
+    body.dark-mode .clear-btn:hover { background: #2a2a3e; }
+    body.dark-mode .badge-good { background: #7c3aed; }
+    body.dark-mode .badge-mid { background: #45475a; color: #cdd6f4; }
+    body.dark-mode .badge-low { background: #313244; color: #a6adc8; }
+    body.dark-mode .bar { background: #7c3aed; }
+    body.dark-mode .empty-state { color: #6c7086; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 200; }
+    .modal-overlay.hidden { display: none; }
+    .modal { background: white; border: 2px solid black; padding: 1.5rem; max-width: 340px; width: 90%; }
+    .modal-title { font-size: 0.875rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 0.75rem; }
+    .modal-text { font-size: 0.8rem; color: #4b5563; margin: 0 0 1.25rem; line-height: 1.5; }
+    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; }
+    .modal-btn { padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; letter-spacing: 0.04em; cursor: pointer; border: 2px solid black; }
+    .modal-btn-cancel { background: white; color: black; }
+    .modal-btn-cancel:hover { background: #f3f4f6; }
+    .modal-btn-confirm { background: black; color: white; }
+    .modal-btn-confirm:hover { background: #1f2937; }
+    body.dark-mode .modal { background: #313244; border-color: #45475a; }
+    body.dark-mode .modal-title { color: #cdd6f4; }
+    body.dark-mode .modal-text { color: #a6adc8; }
+    body.dark-mode .modal-btn { border-color: #45475a; }
+    body.dark-mode .modal-btn-cancel { background: #1e1e2e; color: #cdd6f4; }
+    body.dark-mode .modal-btn-cancel:hover { background: #2a2a3e; }
+    body.dark-mode .modal-btn-confirm { background: #7c3aed; border-color: #7c3aed; color: white; }
+    body.dark-mode .modal-btn-confirm:hover { background: #6d28d9; border-color: #6d28d9; }
+  </style>
+</head>
+<body>
+<div class="report-wrap">
+
+  <div class="report-header">
+    <img src="../assets/favicon-32x32.png" alt="icon">
+    <div>
+      <h1>Eye Health Analytics Report</h1>
+      <p id="report-subtitle">Loading...</p>
+    </div>
+    <div class="header-actions no-print">
+      <button class="clear-btn" id="clear-btn">Clear Data</button>
+      <button class="print-btn" id="print-btn">Print / Save PDF</button>
+    </div>
+  </div>
+
+  <div id="summary-section">
+    <div class="summary-grid" id="summary-grid"></div>
+  </div>
+
+  <h2>Session History — Last 30 Days</h2>
+  <div id="history-section">
+    <div class="empty-state" id="empty-state">No monitoring data found. Start the Wellness Monitor and complete a session to see your analytics here.</div>
+    <table class="data-table" id="history-table" style="display:none">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Session Time</th>
+          <th>Avg Distance</th>
+          <th>Blinks</th>
+          <th>Wellness Score</th>
+          <th>Dist. Alerts</th>
+          <th>Blink Alerts</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="history-tbody"></tbody>
+    </table>
+  </div>
+
+  <h2>Wellness Score Trend</h2>
+  <table class="data-table" id="trend-table" style="display:none">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Score</th>
+        <th>Visual</th>
+      </tr>
+    </thead>
+    <tbody id="trend-tbody"></tbody>
+  </table>
+  <div class="empty-state" id="trend-empty">No trend data yet.</div>
+
+</div>
+
+<div class="modal-overlay hidden" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title">Clear Analytics Data</div>
+    <p class="modal-text">This will permanently delete all 30 days of history. This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" id="modal-cancel">Cancel</button>
+      <button class="modal-btn modal-btn-confirm" id="modal-confirm">Clear Data</button>
+    </div>
+  </div>
+</div>
+
+<script src="../static/js/analytics-report.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "Wellness Monitor",
+  "version": "1.0.0",
+  "description": "AI-powered eye strain and posture monitoring for healthier screen habits",
+  "permissions": [
+    "storage",
+    "notifications",
+    "windows",
+    "alarms",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "assets/favicon-16x16.png",
+      "32": "assets/favicon-32x32.png",
+      "48": "assets/favicon-32x32.png",
+      "128": "assets/android-chrome-192x192.png"
+    }
+  },
+  "icons": {
+    "16": "assets/favicon-16x16.png",
+    "32": "assets/favicon-32x32.png",
+    "48": "assets/favicon-32x32.png",
+    "128": "assets/android-chrome-192x192.png"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["static/js/display-content.js"],
+      "run_at": "document_end",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/sounds/*.mp3",
+        "assets/*.png",
+        "assets/*.ico",
+        "libs/*",
+        "static/css/*",
+        "static/js/*",
+        "templates/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
